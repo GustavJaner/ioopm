@@ -1,0 +1,53 @@
+public class Register {
+
+// ************* ATTRIBUTES *************
+    private boolean open;
+    private Queue queue;
+
+// ************ CONSTRUCTORS ************
+    public Register() {
+        this.open = false;
+        this.queue = new Queue();
+    }
+
+// ************** METHODS ***************
+    public void step() {
+        (this.queue.first()).serve();
+    }
+
+    public void open() { // opens register
+        this.open = true;
+    }
+
+    public void close() {
+        this.open = false;
+    }
+
+    public void addToQueue(Customer c) {
+        this.queue.enQueue(c);
+    }
+
+    public Customer removeCurrentCustomer() {
+        return this.queue.deQueue();
+    }
+
+    public boolean isOpen() {
+        return open == true ? true : false;
+    }
+
+    public boolean hasCustomers() {
+        return this.queue.isEmpty() == false ? true : false;
+    }
+
+    public boolean currentCustomerIsDone() {
+        return (this.queue.first()).isDone() == true ? true : false;
+    }
+
+    public int getQueueLength() {
+        return this.queue.length();
+    }
+
+    public String toString() {
+        return "Register("+open+", "+this.hasCustomers()+")";
+    }
+}
