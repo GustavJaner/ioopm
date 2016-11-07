@@ -15,6 +15,10 @@ public class Customer {
         this.groceries--;
     }
 
+    public int bornTime() {
+        return this.bornTime;
+    }
+
     public boolean isDone() {
         return this.groceries <= 0 ? true : false;
     }

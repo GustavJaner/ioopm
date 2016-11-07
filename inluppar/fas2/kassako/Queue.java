@@ -22,6 +22,10 @@ public class Queue {
     }
 
     public Customer deQueue() {
+        if(this.length == 0) {
+            throw new EmptyQueueException();
+        }
+
         Node doneCustomer = this.first;
         this.first = doneCustomer.next(); // removes first Node
         this.length--;
@@ -42,6 +46,8 @@ public class Queue {
     public int length() {
         return this.length;
     }
+
+    public class EmptyQueueException extends RuntimeException{}
 
 
 //**************** NODE *****************
