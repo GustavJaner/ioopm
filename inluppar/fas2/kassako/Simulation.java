@@ -1,5 +1,6 @@
 import java.util.Random;
 import java.util.*;
+import  java.text.DecimalFormat;
 
 public class Simulation {
 
@@ -12,7 +13,7 @@ public class Simulation {
 
     private int doneCustomers;
     private int maxWaitTime;
-    private int averageWaitTime;
+    private float averageWaitTime;
 
 
     public Simulation(int amountReg, int _intensity, int _maxGroceries, int _threshold) {
@@ -27,21 +28,19 @@ public class Simulation {
     }
 
     void step() {
-
         this.store.step();
-
-        if(this.intensity > random.nextInt(100)) {
-            Customer c = new Customer(this.time, 1+random.nextInt(this.maxGroceries-1));
-            this.store.newCustomer(c);
-        }
 
         if(this.thresholdForNewRegister <= this.store.getAverageQueueLength()) {
             this.store.openNewRegister();
         }
 
+        if(this.intensity > random.nextInt(100)) {
+            Customer c = new Customer(this.time, 1+random.nextInt(this.maxGroceries));
+            this.store.newCustomer(c);
+        }
+
         ArrayList<Customer> doneCustomersArray = new ArrayList<Customer>();
         doneCustomersArray = this.store.getDoneCustomers();
-
         this.doneCustomers += doneCustomersArray.size();
 
         if(doneCustomersArray.size() > 0) {
@@ -49,10 +48,10 @@ public class Simulation {
                 if(this.maxWaitTime < this.time - c.bornTime()) {
                     this.maxWaitTime = this.time - c.bornTime();
                 }
-                if(this.doneCustomers != 0) {
-                    this.averageWaitTime = ((this.averageWaitTime + (this.time - c.bornTime())) / this.doneCustomers);
+                if(this.doneCustomers != 0) { // all other customers exiting the store
+                    this.averageWaitTime = ((this.averageWaitTime + (this.time - c.bornTime())) / 2);
                 }
-                else {
+                else { // first customer to exit store
                     this.averageWaitTime = this.time - c.bornTime();
                 }
             }
@@ -63,8 +62,19 @@ public class Simulation {
         this.time++;
     }
 
+    public String smallerDecimal(double averageWaitTime) {
+        DecimalFormat f = new DecimalFormat("#.00");
+        return (f.format(averageWaitTime));
+    }
+
     public String toString() {
-        return "doneCustomers: " +this.doneCustomers+ "\nmaxWaitTime: " +this.maxWaitTime+
-                "\naverageWaitTime: " +this.averageWaitTime;
+        String humma = this.smallerDecimal(this.averageWaitTime);
+        return  this.store.toString() +
+                "time: " + this.time +
+                "\ndoneCustomers: " + this.doneCustomers +
+                "\nmaxWaitTime: " + this.maxWaitTime +
+                "\naverageWaitTime: " + humma +
+                "\nopenRegisters: " + this.store.amountOfOpenRegisters() +
+                "\naverageQueueLength: " + this.store.getAverageQueueLength();
     }
 }

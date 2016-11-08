@@ -24,6 +24,9 @@ public class RegisterTest {
             }
         } while(r.hasCustomers() == true);
 
+        // System.out.println("currentCustomerIsDone: " + r.currentCustomerIsDone());
+        // r.removeCurrentCustomer();
+
         System.out.println("length of Queue is: " + r.getQueueLength());
         r.close();
         System.out.println(r);

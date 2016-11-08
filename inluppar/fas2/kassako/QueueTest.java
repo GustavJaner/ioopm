@@ -12,6 +12,8 @@ public class QueueTest {
         q.enQueue(c2);
         System.out.println("length is now: " + q.length());
 
+        System.out.println(q);
+
         c0.serve();
         c0.serve();
         if(c0.isDone())
@@ -27,5 +29,6 @@ public class QueueTest {
 
         System.out.println("length is now: " + q.length());
         System.out.println("Queue is empty: " + q.isEmpty());
+
     }
 }

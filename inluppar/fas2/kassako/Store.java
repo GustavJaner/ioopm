@@ -8,8 +8,7 @@ public class Store {
 // ************ CONSTRUCTORS ************
     public Store(int amountReg) {
 
-        registers = new Register[amountReg];
-
+        this.registers = new Register[amountReg]; // just creates the array
         for(int i = 0; i < amountReg; i++) {
             this.registers[i] = new Register();
         }
@@ -30,9 +29,8 @@ public class Store {
         ArrayList<Customer> doneCustomers = new ArrayList<Customer>();
 
         for(Register r : this.registers) {
-            if(r.isOpen() && r.currentCustomerIsDone() == true) {
+            if(r.isOpen() && r.hasCustomers() && r.currentCustomerIsDone()) {
                 doneCustomers.add(r.removeCurrentCustomer());
-                System.out.println("removing customer!");
             }
             if(r.hasCustomers() == false) {
                 r.close();
@@ -45,9 +43,11 @@ public class Store {
     public int getAverageQueueLength() {
         int sum = 0;
         for(Register r : this.registers) {
-            sum += r.getQueueLength();
+            if(r.isOpen()) {
+                sum += r.getQueueLength();
+            }
         }
-        if(this.amountOfOpenRegisters != 0) {
+        if(this.amountOfOpenRegisters() != 0) {
             return (sum/this.amountOfOpenRegisters());
         }
         else {
@@ -82,7 +82,7 @@ public class Store {
             this.registers[0].addToQueue(c);
         }
         else {
-            for(int i = 1; i < this.amountOfRegisters(); i++) {
+            for(int i = 1; i < this.amountOfOpenRegisters(); i++) {
                 if(this.registers[i].getQueueLength() < smallest.getQueueLength())
                     smallest = this.registers[i];
 
@@ -93,11 +93,21 @@ public class Store {
 
 // **************
     public void openNewRegister() {
-        if(this.amountOfRegisters() < this.amountOfOpenRegisters()) {
-            this.registers[this.amountOfOpenRegisters()].open();
+        if(this.amountOfRegisters() > this.amountOfOpenRegisters()) {
+            int index = this.amountOfOpenRegisters();
+            this.registers[index].open();
         }
         else {
-            System.out.print("all registers already open...");
+            return;
         }
+    }
+
+// **************
+    public String toString() {
+        String lol = "";
+        for(Register r : this.registers) {
+            lol += r.toString();
+        }
+        return lol;
     }
 }

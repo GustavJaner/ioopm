@@ -19,11 +19,15 @@ public class Customer {
         return this.bornTime;
     }
 
+    public int groceries() {
+        return this.groceries;
+    }
+
     public boolean isDone() {
         return this.groceries <= 0 ? true : false;
     }
 
     public String toString() {
-        return "Customer("+bornTime+", "+groceries+")";
+        return "" + this.groceries;
     }
 }

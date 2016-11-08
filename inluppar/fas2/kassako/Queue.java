@@ -47,6 +47,14 @@ public class Queue {
         return this.length;
     }
 
+    public String toString() {
+        String lul = "";
+        for(int i = 0; i < this.length()-1; i++) {
+            lul += "@";
+        }
+        return "[" + (this.first()).toString() + "]" + lul;
+    }
+
     public class EmptyQueueException extends RuntimeException{}
 
 

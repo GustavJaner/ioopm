@@ -6,19 +6,29 @@ public class StoreTest {
         System.out.println("s.amountOfRegisters: " + s.amountOfRegisters());
         System.out.println("s.amountOfOpenRegisters: " + s.amountOfOpenRegisters());
 
-        Customer c0 = new Customer(0, 1);
-        Customer c1 = new Customer(1, 1);
-        Customer c2 = new Customer(2, 4);
 
-        s.newCustomer(c0);
-        s.newCustomer(c1);
-        s.newCustomer(c2);
+        for(int i=0; i < 5; i++) {
+            Customer c = new Customer(0, 1);
+
+            if(1 <= s.getAverageQueueLength()) {
+                System.out.println("ny kassa!");
+                s.openNewRegister();
+            }
+            s.newCustomer(c);
+        }
+
+        System.out.println("s.amountOfOpenRegisters: " + s.amountOfOpenRegisters());
 
         do {
             s.step();
             System.out.println("step..");
             s.getDoneCustomers();
         } while(s.amountOfOpenRegisters() != 0);
+
+
+
+
+        s.getDoneCustomers();
 
         System.out.println("s.amountOfOpenRegisters: " + s.amountOfOpenRegisters());
     }

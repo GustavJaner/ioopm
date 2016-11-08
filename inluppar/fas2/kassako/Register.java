@@ -15,7 +15,7 @@ public class Register {
         (this.queue.first()).serve();
     }
 
-    public void open() { // opens register
+    public void open() {
         this.open = true;
     }
 
@@ -28,6 +28,9 @@ public class Register {
     }
 
     public Customer removeCurrentCustomer() {
+        if(this.queue.length() == 0) {
+            throw new EmptyQueueException();
+        }
         return this.queue.deQueue();
     }
 
@@ -40,6 +43,9 @@ public class Register {
     }
 
     public boolean currentCustomerIsDone() {
+        if(this.queue.length() == 0) {
+            throw new EmptyQueueException();
+        }
         return (this.queue.first()).isDone() == true ? true : false;
     }
 
@@ -48,6 +54,13 @@ public class Register {
     }
 
     public String toString() {
-        return "Register("+open+", "+this.hasCustomers()+")";
+        if(this.isOpen()) {
+            return "    " + this.queue.toString() + "\n";
+        }
+        else {
+            return "X   [ ]\n";
+        }
     }
+
+    public class EmptyQueueException extends RuntimeException{}
 }
