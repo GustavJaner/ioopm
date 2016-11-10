@@ -2,6 +2,7 @@ public class StoreTest {
     public static void main(String args[]) {
 
         Store s = new Store(5);
+        int thresholdForNewRegister = 2;
 
         System.out.println("s.amountOfRegisters: " + s.amountOfRegisters());
         System.out.println("s.amountOfOpenRegisters: " + s.amountOfOpenRegisters());
@@ -10,7 +11,7 @@ public class StoreTest {
         for(int i=0; i < 5; i++) {
             Customer c = new Customer(0, 1);
 
-            if(1 <= s.getAverageQueueLength()) {
+            if(thresholdForNewRegister <= s.getAverageQueueLength()) {
                 System.out.println("ny kassa!");
                 s.openNewRegister();
             }

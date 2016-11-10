@@ -12,7 +12,6 @@ public class Store {
         for(int i = 0; i < amountReg; i++) {
             this.registers[i] = new Register();
         }
-        this.registers[0].open();
     }
 
 // ************** METHODS ***************
@@ -32,7 +31,7 @@ public class Store {
             if(r.isOpen() && r.hasCustomers() && r.currentCustomerIsDone()) {
                 doneCustomers.add(r.removeCurrentCustomer());
             }
-            if(r.hasCustomers() == false) {
+            if(r.isOpen() && r.hasCustomers() == false) {
                 r.close();
             }
         }
@@ -75,17 +74,23 @@ public class Store {
     }
 
 // **************
-    public void newCustomer(Customer c) {
-        Register smallest = this.registers[0];
+    public void newCustomer(Customer c, int thresholdForNewRegister) {
+        if(this.amountOfOpenRegisters() == 0) {
+            this.openNewRegister();
+        }
+        else if(thresholdForNewRegister <= this.getAverageQueueLength()) {
+            this.openNewRegister();
+        }
 
+        Register smallest = this.registers[0];
         if(this.amountOfOpenRegisters() == 1) {
             this.registers[0].addToQueue(c);
         }
         else {
             for(int i = 1; i < this.amountOfOpenRegisters(); i++) {
-                if(this.registers[i].getQueueLength() < smallest.getQueueLength())
+                if(this.registers[i].getQueueLength() < smallest.getQueueLength()) {
                     smallest = this.registers[i];
-
+                }
             smallest.addToQueue(c);
             }
         }

@@ -30,13 +30,9 @@ public class Simulation {
     void step() {
         this.store.step();
 
-        if(this.thresholdForNewRegister <= this.store.getAverageQueueLength()) {
-            this.store.openNewRegister();
-        }
-
         if(this.intensity > random.nextInt(100)) {
             Customer c = new Customer(this.time, 1+random.nextInt(this.maxGroceries));
-            this.store.newCustomer(c);
+            this.store.newCustomer(c, thresholdForNewRegister);
         }
 
         ArrayList<Customer> doneCustomersArray = new ArrayList<Customer>();
@@ -45,14 +41,15 @@ public class Simulation {
 
         if(doneCustomersArray.size() > 0) {
             for(Customer c : doneCustomersArray) {
-                if(this.maxWaitTime < this.time - c.bornTime()) {
-                    this.maxWaitTime = this.time - c.bornTime();
+                int timeInStore = this.time - c.bornTime();
+                if(this.maxWaitTime < timeInStore) {
+                    this.maxWaitTime = timeInStore;
                 }
-                if(this.doneCustomers != 0) { // all other customers exiting the store
-                    this.averageWaitTime = ((this.averageWaitTime + (this.time - c.bornTime())) / 2);
+                if(this.doneCustomers == 1) { // first customer to exit store
+                    this.averageWaitTime = timeInStore;
                 }
-                else { // first customer to exit store
-                    this.averageWaitTime = this.time - c.bornTime();
+                else { // all other customers exiting the store
+                    this.averageWaitTime = (this.averageWaitTime*(doneCustomers-1) + timeInStore ) / doneCustomers;
                 }
             }
 
@@ -68,12 +65,12 @@ public class Simulation {
     }
 
     public String toString() {
-        String humma = this.smallerDecimal(this.averageWaitTime);
+        String avgWaitTimeStr = this.smallerDecimal(this.averageWaitTime);
         return  this.store.toString() +
                 "time: " + this.time +
                 "\ndoneCustomers: " + this.doneCustomers +
                 "\nmaxWaitTime: " + this.maxWaitTime +
-                "\naverageWaitTime: " + humma +
+                "\naverageWaitTime: " + avgWaitTimeStr +
                 "\nopenRegisters: " + this.store.amountOfOpenRegisters() +
                 "\naverageQueueLength: " + this.store.getAverageQueueLength();
     }

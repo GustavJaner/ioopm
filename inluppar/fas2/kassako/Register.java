@@ -28,9 +28,6 @@ public class Register {
     }
 
     public Customer removeCurrentCustomer() {
-        if(this.queue.length() == 0) {
-            throw new EmptyQueueException();
-        }
         return this.queue.deQueue();
     }
 
@@ -43,9 +40,6 @@ public class Register {
     }
 
     public boolean currentCustomerIsDone() {
-        if(this.queue.length() == 0) {
-            throw new EmptyQueueException();
-        }
         return (this.queue.first()).isDone() == true ? true : false;
     }
 
@@ -61,6 +55,4 @@ public class Register {
             return "X   [ ]\n";
         }
     }
-
-    public class EmptyQueueException extends RuntimeException{}
 }
